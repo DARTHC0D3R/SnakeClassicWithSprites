@@ -21,29 +21,29 @@ SDL_Rect *body_turn_down_right;
 SDL_Rect  *body_turn_left_up;
 SDL_Rect *apple;
 
-int get_length(RenderingTexture *head){
-	int counter=1;
-	RenderingTexture *temp=head;
-	while(temp!=NULL){
+int get_length(RenderingTexture *head) {
+	int counter = 1;
+	RenderingTexture *temp = head;
+	while (temp != NULL) {
 		counter++;
-		temp=temp->next;
+		temp = temp->next;
 	}
-	return counter*10;
+	return counter * 10;
 }
-int check_snake_collision(RenderingTexture *head){
-	RenderingTexture *temp=head->next->next;
-	while(temp!=NULL){
-		if(check_collision(temp->x,temp->y,head->x,head->y)==1){
+int check_snake_collision(RenderingTexture *head) {
+	RenderingTexture *temp = head->next->next;
+	while (temp != NULL) {
+		if (check_collision(temp->x, temp->y, head->x, head->y) == 1) {
 			return 1;
 		}
-		temp=temp->next;
+		temp = temp->next;
 	}
 	return 0;
 }
 void increase_length(RenderingTexture **head, SDL_Texture *target, SDL_Texture *snake_head_and_tail) {
 	RenderingTexture *next;
 	*head = insert_new_texture(*head, (*head)->x + (*head)->x_incr, (*head)->y + (*head)->y_incr, (*head)->clipped_texture, snake_head_and_tail, (*head)->x_incr, (*head)->y_incr, (*head)->direction);
-	next=(*head)->next;
+	next = (*head)->next;
 	next->target_texture = target;
 	switch (next->direction) {
 	case SDLK_DOWN:
@@ -62,7 +62,7 @@ void generate_food(SDL_Renderer *renderer, SDL_Texture *apple_texture, SDL_Rect 
 	}
 	SDL_RenderCopy(renderer, apple_texture, apple, food);
 }
-int check_collision(int x,int y,int x1,int y1) {
+int check_collision(int x, int y, int x1, int y1) {
 	if (x < x1 + 64 && x + 64 > x1 && y < y1 + 64 && 64 + y > y1) {
 		return 1;
 	}
@@ -289,9 +289,7 @@ void update_texture(RenderingTexture *last) {
 
 void render_snake(SDL_Renderer *renderer, RenderingTexture *head) {
 	RenderingTexture *temp = head;
-	SDL_Rect viewing_window;
-	viewing_window.w = 64;
-	viewing_window.h = 64;
+	static SDL_Rect viewing_window = (SDL_Rect) {0, 0, 64, 64};
 	while (temp != NULL) {
 		viewing_window.x = temp->x;
 		viewing_window.y = temp->y;
